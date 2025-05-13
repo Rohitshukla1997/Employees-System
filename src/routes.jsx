@@ -6,8 +6,16 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
+import { TbUsersPlus } from "react-icons/tb";
+import { FaUsers } from "react-icons/fa";
+import { CiBookmarkCheck } from "react-icons/ci";
+import { BsClipboard2Data } from "react-icons/bs";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
+import Attendancemark from "./pages/attendance/attendancemark";
 import { SignIn, SignUp } from "@/pages/auth";
+import { NewUsers } from "./pages/users/NewUsers";
+import AttendanceRecords from "./pages/records/attendanceRecords";
+
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -28,19 +36,32 @@ export const routes = [
         name: "profile",
         path: "/profile",
         element: <Profile />,
+        hidden: true, //hide from sidebar
       },
       {
-        icon: <TableCellsIcon {...icon} />,
-        name: "tables",
+        icon: <TbUsersPlus {...icon} />,
+        name: "Users",
+        path: "/newUsers",
+        element: <NewUsers />,
+      },
+      {
+        icon: <FaUsers {...icon} />,
+        name: "Employees",
         path: "/tables",
         element: <Tables />,
       },
       {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
-        path: "/notifications",
-        element: <Notifications />,
+        icon: <CiBookmarkCheck {...icon} />,
+        name: "Mark Attendence",
+        path: "/attendancemark",
+        element: <Attendancemark />,
       },
+      {
+        icon: <BsClipboard2Data {...icon} />,
+        name: "Attendence Records",
+        path: "/attendanceRecords",
+        element: <AttendanceRecords />
+      }
     ],
   },
   // {
