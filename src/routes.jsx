@@ -6,8 +6,7 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { TbUsersPlus } from "react-icons/tb";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaUserPlus } from "react-icons/fa";
 import { CiBookmarkCheck } from "react-icons/ci";
 import { BsClipboard2Data } from "react-icons/bs";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
@@ -39,7 +38,7 @@ export const routes = [
         hidden: true, //hide from sidebar
       },
       {
-        icon: <TbUsersPlus {...icon} />,
+        icon: <FaUserPlus {...icon} />,
         name: "Users",
         path: "/newUsers",
         element: <NewUsers />,
