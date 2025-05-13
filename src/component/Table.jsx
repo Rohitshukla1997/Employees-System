@@ -152,7 +152,7 @@ function Table({
                       ))}
                     {(editButton || deleteButton || viewButton) && (
                       <td className="px-3 py-2 border text-center">
-                        <div className="flex justify-center items-center gap-2">
+                        <div className="flex justify-center items-center gap-4">
                           {editButton && (
                             <button
                               onClick={() => handleEditButton(row.id)}

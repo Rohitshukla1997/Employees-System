@@ -26,7 +26,7 @@ import {
   setOpenConfigurator,
   setOpenSidenav,
 } from "@/context";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -35,6 +35,22 @@ export function DashboardNavbar() {
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
 
     const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <Navbar
@@ -105,30 +121,21 @@ export function DashboardNavbar() {
             </IconButton>
           </Link> */}
 
-          <div className="relative">
-          <Button
+    <div className="relative" ref={dropdownRef}>
+      <Button
         variant="text"
         color="blue-gray"
         onClick={() => setIsOpen(!isOpen)}
         className="hidden items-center gap-1 px-4 xl:flex normal-case"
       >
         <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-            Profile
+        Profile
         <ChevronDownIcon className="h-4 w-4" />
       </Button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50">
           <ul className="py-1 text-sm text-gray-700">
-            <li>
-              <Link
-                to="/sign-in"
-                className="block px-4 py-2 hover:bg-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                Logout
-              </Link>
-            </li>
             <li>
               <Link
                 to="/profile"
@@ -138,14 +145,19 @@ export function DashboardNavbar() {
                 Profile
               </Link>
             </li>
+            <li>
+              <Link
+                to="/sign-in"
+                className="block px-4 py-2 hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+              >
+                Logout
+              </Link>
+            </li>
           </ul>
         </div>
       )}
     </div>
-
-
-
-
 
 
           <Menu>
