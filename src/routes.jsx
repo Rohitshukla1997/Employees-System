@@ -9,12 +9,14 @@ import {
 import { FaUsers, FaUserPlus } from "react-icons/fa";
 import { CiBookmarkCheck } from "react-icons/ci";
 import { BsClipboard2Data } from "react-icons/bs";
+import { SlCalender } from "react-icons/sl";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import Attendancemark from "./pages/attendance/attendancemark";
 import { SignIn, SignUp } from "@/pages/auth";
 import { NewUsers } from "./pages/users/NewUsers";
 import AttendanceRecords from "./pages/records/attendanceRecords";
 import NewEmployees from "./pages/employees/newEmployees";
+import LeaveEmployees from "./pages/leaves/leaveEmployees";
 
 
 const icon = {
@@ -61,7 +63,13 @@ export const routes = [
         name: "Attendence Records",
         path: "/attendanceRecords",
         element: <AttendanceRecords />
-      }
+      },
+      {
+        icon: <SlCalender {...icon} />,
+        name: "Employee Leave",
+        path: "/leaveEmployees",
+        element: <LeaveEmployees />
+      },
     ],
   },
   // {
