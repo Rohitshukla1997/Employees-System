@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { employees } from './data/data';
 import Table from '@/component/Table';
 import SmartPagination from '@/component/SmartPagination';
 import SearchInput from '@/component/SearchInput';
+import { users } from './data/data';
 
 export const NewUsers = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -12,7 +12,7 @@ export const NewUsers = () => {
 
   // Filter + paginate data
   useEffect(() => {
-    const filtered = employees.filter(emp =>
+    const filtered = users.filter(emp =>
       emp.username.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -22,7 +22,7 @@ export const NewUsers = () => {
     setFilteredData(filtered.slice(startIndex, endIndex));
   }, [currentPage, itemsPerPage, searchQuery]);
 
-  const totalFiltered = employees.filter(emp =>
+  const totalFiltered = users.filter(emp =>
     emp.username.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const totalPages = Math.ceil(totalFiltered.length / itemsPerPage);
