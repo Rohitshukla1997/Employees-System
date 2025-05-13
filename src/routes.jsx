@@ -14,6 +14,7 @@ import Attendancemark from "./pages/attendance/attendancemark";
 import { SignIn, SignUp } from "@/pages/auth";
 import { NewUsers } from "./pages/users/NewUsers";
 import AttendanceRecords from "./pages/records/attendanceRecords";
+import NewEmployees from "./pages/employees/newEmployees";
 
 
 const icon = {
@@ -46,8 +47,8 @@ export const routes = [
       {
         icon: <FaUsers {...icon} />,
         name: "Employees",
-        path: "/tables",
-        element: <Tables />,
+        path: "/newEmployees",
+        element: <NewEmployees />,
       },
       {
         icon: <CiBookmarkCheck {...icon} />,

@@ -25,7 +25,7 @@ function Table({
   viewButton,
   viewButtonLabel = 'View',
   viewButtonIcon = <FaEye size={16} />,
-  viewButtonColor = 'rgb(10, 45, 99)',
+  viewButtonColor = 'gray',
   handleViewButton,
   editButton,
   handleEditButton,
@@ -86,7 +86,7 @@ function Table({
             <thead>
               <tr>
                 <th className="border-b border-blue-gray-50 py-3 px-5 text-center">
-                  <Typography  className="text-[11px] font-bold uppercase text-blue-gray-400 ">
+                  <Typography  className=" font-bold ">
                     SN
                   </Typography>
                 </th>
@@ -103,7 +103,7 @@ function Table({
                   ))}
                 {(editButton || deleteButton || viewButton) && (
                   <th className="border-b border-blue-gray-50 py-3 px-5  text-center">
-                    <Typography  className="text-[11px] font-bold uppercase text-blue-gray-400">
+                    <Typography  className=" font-bold ">
                       Actions
                     </Typography>
                   </th>
