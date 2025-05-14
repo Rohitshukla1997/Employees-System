@@ -27,14 +27,15 @@ export function Sidenav({ brandImg, brandName, routes }) {
       <div
         className={`relative`}
       >
-        <Link to="/" className="py-6 px-8 text-center">
+        {/* <Link to="/" className="py-6 px-8 text-center"> */}
           <Typography
+          className="py-6 px-8 text-center"
             variant="h6"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
           >
             {brandName}
           </Typography>
-        </Link>
+        {/* </Link> */}
         <IconButton
           variant="text"
           color="white"

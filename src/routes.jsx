@@ -17,11 +17,15 @@ import { NewUsers } from "./pages/users/NewUsers";
 import AttendanceRecords from "./pages/records/attendanceRecords";
 import NewEmployees from "./pages/employees/newEmployees";
 import LeaveEmployees from "./pages/leaves/leaveEmployees";
+import React from "react";
 
 
 const icon = {
   className: "w-5 h-5 text-inherit",
 };
+
+const ProfileRecord = React.lazy(()=> import('./pages/records/profileRecord.jsx'))
+
 
 export const routes = [
   {
@@ -70,6 +74,13 @@ export const routes = [
         path: "/leaveEmployees",
         element: <LeaveEmployees />
       },
+      {
+        name: "Profile Record",
+        path: "/dashboard/profileRecord/:id",
+        element: <ProfileRecord />,
+        hidden: true,
+
+      }
     ],
   },
   // {
