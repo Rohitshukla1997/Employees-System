@@ -76,7 +76,7 @@ export const routes = [
       },
       {
         name: "Profile Record",
-        path: "/dashboard/profileRecord/:id",
+        path: "profileRecord/:id", 
         element: <ProfileRecord />,
         hidden: true,
 

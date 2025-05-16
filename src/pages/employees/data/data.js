@@ -2,6 +2,7 @@ export const employees = [
     {
         id: '1',
         name: 'Rohit Shukla',
+        email: 'rohitshukla@mail.com',
         degination: 'React.js Developer',
         type: 'Permanent',
         contact: '9876543210',
@@ -10,6 +11,7 @@ export const employees = [
     {
         id: '2',
         name: 'Pavan',
+        email: 'pavan@mail.com',
         degination: 'Fullstack Developer',
         type: 'Permanent',
         contact: '9876543210',
@@ -17,6 +19,7 @@ export const employees = [
     }, {
         id: '3',
         name: 'Gagan',
+        email: 'gagan@mail.com',
         degination: 'Fullstack Developer',
         type: 'Permanent',
         contact: '9876543210',
@@ -24,6 +27,7 @@ export const employees = [
     }, {
         id: '4',
         name: 'Prasad',
+        email: 'prasad@mail.com',
         degination: 'PHP Developer',
         type: 'Internship',
         contact: '9876543210',
@@ -31,6 +35,7 @@ export const employees = [
     }, {
         id: '5',
         name: 'Ayush',
+        email: 'ayush@mail.com',
         degination: 'Dm department',
         type: 'Internship',
         contact: '9876543210',

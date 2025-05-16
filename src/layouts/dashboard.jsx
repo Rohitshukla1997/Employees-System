@@ -9,6 +9,7 @@ import {
 } from "@/widgets/layout";
 import routes from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+import { Suspense } from "react";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -34,15 +35,20 @@ export function Dashboard() {
         >
           <Cog6ToothIcon className="h-5 w-5" />
         </IconButton> */}
+
+        {/* Suspense wrapper added below 👇 */}
+
+        <Suspense fallback={<div className="text-center py-10">Loading...</div>}>
         <Routes>
-          {routes.map(
-            ({ layout, pages }) =>
-              layout === "dashboard" &&
-              pages.map(({ path, element }) => (
-                <Route exact path={path} element={element} />
-              ))
-          )}
-        </Routes>
+            {routes.map(
+              ({ layout, pages }) =>
+                layout === "dashboard" &&
+                pages.map(({ path, element }) => (
+                  <Route key={path} path={path} element={element} />
+                ))
+            )}
+          </Routes>
+        </Suspense>
         {/* <div className="text-blue-gray-600">
           <Footer />
         </div> */}

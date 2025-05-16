@@ -56,6 +56,7 @@ const newEmployees = () => {
 
     const columns = [
       { label: 'Employee Name', key: 'name', sortable: true },
+      { label: 'Email', key: 'email', sortable: true },
       { label: 'Degination', key: 'degination', sortable: true },
       { label: 'Type', key: 'type', sortable: true },
       { label: 'Contact', key: 'contact', sortable: true },

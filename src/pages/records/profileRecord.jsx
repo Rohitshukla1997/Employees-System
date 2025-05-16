@@ -1,12 +1,50 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import ProfileCard from './component/ProfileCard';
+import { profileView } from './data/data';
+import Tabs from './component/Tabs';
 
-const profileRecord = () => {
-  const { id } = useParams()
-  console.log("idzzzzzzz",id)
+const ProfileRecord = () => {
+  const { id } = useParams();
+
+  // Find the profile matching the ID
+  const profile = profileView.find((item) => item.id === id);
+
+  // Fallback if no profile is found
+  if (!profile) {
+    return (
+      <div className="text-center text-red-500 mt-10">
+        Profile not found
+      </div>
+    );
+  }
+
+  const profileImage = `https://api.dicebear.com/9.x/thumbs/svg?seed=${profile.name}`;
+
+  const tabData =[
+    { label: 'Attendance', content: 'Attendance section' },
+    { label: 'Attendance History', content: 'Attendance history section'},
+    { label: 'Document locker', content: 'Document locker section' }
+  ]
+
   return (
-    <div>profileRecord</div>
-  )
-}
+    <>
+    <ProfileCard
+      profileImage={profileImage}
+      name={profile.name}
+      role={profile.designation}
+      email={profile.email}
+      type={profile.type}
+      contact={profile.contact}
+      joined={profile.joined}
+    />
 
-export default profileRecord
+      <div className="max-w-4xl mx-auto mt-5">
+        <Tabs tabs={tabData}  />
+      </div>
+
+    </>
+  );
+};
+
+export default ProfileRecord;
