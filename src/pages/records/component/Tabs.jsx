@@ -24,9 +24,10 @@ function Tabs({ tabs }) {
       </div>
 
       {/* Tab Panels */}
-      <div className="mt-4 border rounded p-4">
+      <div className="mt-4 rounded-xl border border-gray-200 bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
         {tabs[activeTab]?.content}
       </div>
+
     </div>
   );
 }

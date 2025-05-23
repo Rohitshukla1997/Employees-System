@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import ProfileCard from './component/ProfileCard';
 import { profileView } from './data/data';
 import Tabs from './component/Tabs';
+import AttendanceCard from './attendance/attendanceCard';
+import HistoryAttendance from './historyattendance/historyAttendance';
 
 const ProfileRecord = () => {
   const { id } = useParams();
@@ -22,8 +24,8 @@ const ProfileRecord = () => {
   const profileImage = `https://api.dicebear.com/9.x/thumbs/svg?seed=${profile.name}`;
 
   const tabData =[
-    { label: 'Attendance', content: 'Attendance section' },
-    { label: 'Attendance History', content: 'Attendance history section'},
+    { label: 'Attendance', content: <AttendanceCard id={id} /> },
+    { label: 'Attendance History', content: <HistoryAttendance id={id} /> },
     { label: 'Document locker', content: 'Document locker section' }
   ]
 

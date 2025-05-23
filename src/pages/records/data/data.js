@@ -95,3 +95,175 @@ export const profileView = [
         joined: 'Mar 15, 2024',
     },
 ]
+
+
+
+
+import { MdCoPresent } from "react-icons/md";
+import { LiaUserSlashSolid } from "react-icons/lia";
+import { MdPendingActions } from "react-icons/md";
+import { FcApproval } from "react-icons/fc";
+
+export const statisticsCardsData = [
+    {
+        color: "gray",
+        icon: MdCoPresent,
+        title: "Presents Days",
+        value: "15",
+        bgColor: "green",
+        footer: {
+            label: "Current Month",
+        },
+    },
+    {
+        color: "gray",
+        icon: LiaUserSlashSolid,
+        title: "Absents Days",
+        value: "4",
+        footer: {
+            label: "Current Month",
+        },
+    },
+    {
+        color: "gray",
+        icon: MdPendingActions,
+        title: "Pending Leave",
+        value: "3",
+        footer: {
+            label: "Current Month",
+        },
+    },
+    {
+        color: "gray",
+        icon: FcApproval,
+        title: "Approved Leave",
+        value: "1",
+        footer: {
+            label: "Current Month",
+        },
+    },
+];
+
+export const attendanceHistory = [
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+    {
+        id: '1',
+        name: 'Rohit Shukla',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+
+
+    {
+        id: '2',
+        name: 'Gagan',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+
+    {
+        id: '3',
+        name: 'Diwakar',
+        type: 'Absent',
+        date: '01/03/2025T18:00',
+    },
+
+    {
+        id: '4',
+        name: 'Ayush',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+
+    {
+        id: '5',
+        name: 'Prajat',
+        type: 'Present',
+        date: '01/03/2025T10:00',
+    },
+
+    {
+        id: '6',
+        name: 'Prasad',
+        type: 'Absent',
+        date: '01/03/2025T18:00',
+    },
+
+]

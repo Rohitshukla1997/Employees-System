@@ -25,7 +25,7 @@ const icon = {
 };
 
 const ProfileRecord = React.lazy(()=> import('./pages/records/profileRecord.jsx'))
-
+const AllHistoryDeatils = React.lazy(()=> import('./pages/records/historyattendance/allHistoryDeatils.jsx'))
 
 export const routes = [
   {
@@ -78,6 +78,13 @@ export const routes = [
         name: "Profile Record",
         path: "profileRecord/:id", 
         element: <ProfileRecord />,
+        hidden: true,
+
+      },
+      {
+        name: "All History Record",
+        path: "allHistoryDeatils/:id", 
+        element: <AllHistoryDeatils />,
         hidden: true,
 
       }
