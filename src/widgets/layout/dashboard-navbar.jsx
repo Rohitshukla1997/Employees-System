@@ -27,6 +27,7 @@ import {
   setOpenSidenav,
 } from "@/context";
 import { useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -136,16 +137,16 @@ export function DashboardNavbar() {
               </Link>
             </li>
             <li>
-  <button
-    onClick={() => {
-      handleLogout();
-      setIsOpen(false);
-    }}
-    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-  >
-    Logout
-  </button>
-</li>
+                <button
+                 onClick={() => {
+                       handleLogout();
+                      setIsOpen(false);
+                   }}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                 >
+                      Logout
+                     </button>
+              </li>
 
           </ul>
         </div>
