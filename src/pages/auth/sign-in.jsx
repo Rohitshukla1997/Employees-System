@@ -43,11 +43,12 @@ export function SignIn() {
         const role = decoded.role;
 
         // Redirect based on role
-        if (role === 'admin') {
-          navigate('/admin-dashboard');
-        } else {
-          navigate('/dashboard/home');
+        if (role === 'SuperAdmin') {
+          navigate('/dashboard/home'); // superadmin default page
+        } else if (role === 'Admin') {
+          navigate('/dashboard/home'); // admin default page
         }
+        
       }
     } catch (error) {
       console.error('Login failed:', error.message || error);

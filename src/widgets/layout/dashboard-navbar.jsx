@@ -5,7 +5,6 @@ import {
   Button,
   IconButton,
   Breadcrumbs,
-  Input,
   Menu,
   MenuHandler,
   MenuList,
@@ -28,6 +27,8 @@ import {
 } from "@/context";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -35,9 +36,9 @@ export function DashboardNavbar() {
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-    const [isOpen, setIsOpen] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // Close dropdown when clicking outside
@@ -48,17 +49,35 @@ export function DashboardNavbar() {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  // Get username from JWT token
+  const token = Cookies.get("token");
+  let username = "User";
+
+  try {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      username = decodedToken?.user?.username || decodedToken?.username || "User";
+    }
+  } catch (error) {
+    console.error("Invalid token:", error);
+    Cookies.remove("token", { path: "/" });
+    navigate("/sign-in", { replace: true });
+  }
+
   const handleLogout = () => {
-    Cookies.remove("token"); // remove token cookie
-    localStorage.clear(); // optional: clear other saved data
-    sessionStorage.clear(); // optional: clear session data
-    navigate("/sign-in"); // redirect to login
+    try {
+      Cookies.remove("token", { path: "/" });
+      queryClient.clear();
+      navigate("/sign-in", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -75,9 +94,7 @@ export function DashboardNavbar() {
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
           <Breadcrumbs
-            className={`bg-transparent p-0 transition-all ${
-              fixedNavbar ? "mt-1" : ""
-            }`}
+            className={`bg-transparent p-0 transition-all ${fixedNavbar ? "mt-1" : ""}`}
           >
             <Link to={`/${layout}`}>
               <Typography
@@ -88,11 +105,7 @@ export function DashboardNavbar() {
                 {layout}
               </Typography>
             </Link>
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
+            <Typography variant="small" color="blue-gray" className="font-normal">
               {page}
             </Typography>
           </Breadcrumbs>
@@ -100,8 +113,9 @@ export function DashboardNavbar() {
             {page}
           </Typography>
         </div>
-        <div className="flex items-center">
- 
+
+        <div className="flex items-center gap-4">
+          {/* Sidebar toggle button */}
           <IconButton
             variant="text"
             color="blue-gray"
@@ -111,55 +125,45 @@ export function DashboardNavbar() {
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
 
+          {/* Profile Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <Button
+              variant="text"
+              color="blue-gray"
+              onClick={() => setIsOpen(!isOpen)}
+              className="hidden items-center gap-2 px-4 xl:flex normal-case"
+            >
+              <img
+                src={`https://api.dicebear.com/9.x/initials/svg?seed=${username}`}
+                alt="avatar"
+                className="rounded-full h-6 w-6 object-cover"
+              />
+              <span className="text-sm">{username.slice(0, 12)}</span>
+              <ChevronDownIcon className="h-4 w-4" />
+            </Button>
 
-    <div className="relative" ref={dropdownRef}>
-      <Button
-        variant="text"
-        color="blue-gray"
-        onClick={() => setIsOpen(!isOpen)}
-        className="hidden items-center gap-1 px-4 xl:flex normal-case"
-      >
-        <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-        Profile
-        <ChevronDownIcon className="h-4 w-4" />
-      </Button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50">
-          <ul className="py-1 text-sm text-gray-700">
-            <li>
-              <Link
-                to="/profile"
-                className="block px-4 py-2 hover:bg-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                Profile
-              </Link>
-            </li>
-            <li>
-                <button
-                 onClick={() => {
-                       handleLogout();
-                      setIsOpen(false);
-                   }}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                 >
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50">
+                <ul className="py-1 text-sm text-gray-700">
+                  <li className="px-4 py-2">{username.slice(0, 12)}</li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Logout
-                     </button>
-              </li>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
 
-          </ul>
-        </div>
-      )}
-    </div>
-
-
+          {/* Notification and settings */}
           <Menu>
-            {/* <MenuHandler>
-              <IconButton variant="text" color="blue-gray">
-                <BellIcon className="h-5 w-5 text-blue-gray-500" />
-              </IconButton>
-            </MenuHandler> */}
             <MenuList className="w-max border-0">
               <MenuItem className="flex items-center gap-3">
                 <Avatar
@@ -232,6 +236,8 @@ export function DashboardNavbar() {
               </MenuItem>
             </MenuList>
           </Menu>
+
+          {/* Configurator icon */}
           <IconButton
             variant="text"
             color="blue-gray"
@@ -245,6 +251,6 @@ export function DashboardNavbar() {
   );
 }
 
-DashboardNavbar.displayName = "/src/widgets/layout/dashboard-navbar.jsx";
+// DashboardNavbar.displayName = "/src/widgets/layout/dashboard-navbar.jsx";
 
 export default DashboardNavbar;
