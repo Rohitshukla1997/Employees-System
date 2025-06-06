@@ -4,6 +4,11 @@ import React from 'react'
 import { statisticsCardsData } from '../data/data'
 
 const attendanceCard = ({id}) => {
+
+  const handleViewDetailedReport = (id) => {
+    console.log("idzzzzzzz", id)
+  }
+
     return (
         <div>
             
@@ -25,6 +30,26 @@ const attendanceCard = ({id}) => {
                       />
                     ))}
                   </div>
+
+                <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                    <button
+                       onClick={() => handleViewDetailedReport(id)}
+                        style={{
+                                borderRadius: '8px',
+                                padding: '0.5rem 1.5rem',
+                                border: '1.5px solid #0d6efd', // Bootstrap primary blue
+                                backgroundColor: 'transparent',
+                                color: '#0d6efd',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                               }}
+                                 className="custom-hover"
+                      >       
+                             View Detailed Report
+                         </button>
+                      </div>
+
         </div>
     )
 }

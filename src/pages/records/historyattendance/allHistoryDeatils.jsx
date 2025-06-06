@@ -37,16 +37,42 @@ const AllHistoryDetails = () => {
     { label: 'Type', key: 'type', sortable: true },
   ];
 
+  // add
+  const handleAdd = () => {
+    console.log('Add User clicked');
+    // Open modal or redirect to add form
+  };
+
+  // edit
+  const handleEditButton = (id) => {
+    console.log("idz", id)
+  }
+
+  // delete
+  const handleDeleteButton = (id) => {
+    console.log("idz", id)
+  }
+
   return (
     <div>
-      <div className="mb-4 flex justify-end items-start">
-        <SearchInput
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onClear={() => setSearchQuery('')}
-          placeholder="Search by employee name..."
-        />
-      </div>
+          <div className="mb-4 flex justify-between items-center">
+    <div></div> {/* Empty div to push content to the right */}
+
+    <div className="flex gap-2">
+      <SearchInput
+        value={searchQuery}
+        onChange={handleSearchChange}
+        onClear={() => setSearchQuery('')}
+        placeholder="Search by username..."
+      />
+      <button
+        onClick={handleAdd} // define this function to open modal or perform action
+        className="bg-gray-600 hover:bg-brown-700 text-white px-4 py-2 rounded-md shadow-sm"
+      >
+        Add
+      </button>
+    </div>
+  </div>
 
       <Table
         title="Attendance History"
@@ -56,6 +82,10 @@ const AllHistoryDetails = () => {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         isFetching={false}
+        editButton={true}
+        handleEditButton={handleEditButton}
+        deleteButton={true}
+        handleDeleteButton={handleDeleteButton}
       />
 
       <SmartPagination

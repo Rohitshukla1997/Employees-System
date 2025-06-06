@@ -1,4 +1,4 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   Navbar,
   Typography,
@@ -33,6 +33,7 @@ export function DashboardNavbar() {
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -51,6 +52,13 @@ export function DashboardNavbar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("token"); // remove token cookie
+    localStorage.clear(); // optional: clear other saved data
+    sessionStorage.clear(); // optional: clear session data
+    navigate("/sign-in"); // redirect to login
+  };
 
   return (
     <Navbar
@@ -92,9 +100,7 @@ export function DashboardNavbar() {
           </Typography>
         </div>
         <div className="flex items-center">
-          {/* <div className="mr-auto md:mr-4 md:w-56">
-            <Input label="Search" />
-          </div> */}
+ 
           <IconButton
             variant="text"
             color="blue-gray"
@@ -103,23 +109,7 @@ export function DashboardNavbar() {
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          {/* <Link to="/auth/sign-in">
-            <Button
-              variant="text"
-              color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex normal-case"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-              Sign In
-            </Button>
-            <IconButton
-              variant="text"
-              color="blue-gray"
-              className="grid xl:hidden"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-            </IconButton>
-          </Link> */}
+
 
     <div className="relative" ref={dropdownRef}>
       <Button
@@ -146,14 +136,17 @@ export function DashboardNavbar() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/sign-in"
-                className="block px-4 py-2 hover:bg-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                Logout
-              </Link>
-            </li>
+  <button
+    onClick={() => {
+      handleLogout();
+      setIsOpen(false);
+    }}
+    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+  >
+    Logout
+  </button>
+</li>
+
           </ul>
         </div>
       )}
