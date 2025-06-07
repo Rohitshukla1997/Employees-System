@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const ReusableModal = ({
   show,
@@ -12,92 +12,92 @@ const ReusableModal = ({
   size = 'lg',
 }) => {
   const initialFormState = fields.reduce((acc, field) => {
-    if (field.type === 'multiselect') acc[field.name] = [];
-    else if (field.type === 'select') acc[field.name] = null;
-    else acc[field.name] = '';
-    return acc;
-  }, {});
+    if (field.type === 'multiselect') acc[field.name] = []
+    else if (field.type === 'select') acc[field.name] = null
+    else acc[field.name] = ''
+    return acc
+  }, {})
 
   // State for form data
-  const [formData, setFormData] = useState(initialFormState);
+  const [formData, setFormData] = useState(initialFormState)
   // State for errors
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({})
   // State to track which password fields are visible, keyed by field.name
-  const [showPasswords, setShowPasswords] = useState({});
+  const [showPasswords, setShowPasswords] = useState({})
 
   useEffect(() => {
     if (show) {
       if (initialData) {
         const prefilledData = fields.reduce((acc, field) => {
-          acc[field.name] = initialData[field.name] || (field.type === 'multiselect' ? [] : '');
-          return acc;
-        }, {});
-        setFormData(prefilledData);
+          acc[field.name] = initialData[field.name] || (field.type === 'multiselect' ? [] : '')
+          return acc
+        }, {})
+        setFormData(prefilledData)
       } else {
-        setFormData(initialFormState);
+        setFormData(initialFormState)
       }
 
       // Reset all password visibility to false on open
-      const initialVisibility = {};
-      fields.forEach(field => {
+      const initialVisibility = {}
+      fields.forEach((field) => {
         if (field.type === 'password') {
-          initialVisibility[field.name] = false;
+          initialVisibility[field.name] = false
         }
-      });
-      setShowPasswords(initialVisibility);
+      })
+      setShowPasswords(initialVisibility)
     }
-  }, [show, initialData]);
+  }, [show, initialData])
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const handleSelectChange = (selectedOption, fieldName) => {
-    setFormData((prev) => ({ ...prev, [fieldName]: selectedOption }));
-  };
+    setFormData((prev) => ({ ...prev, [fieldName]: selectedOption }))
+  }
 
   const togglePasswordVisibility = (fieldName) => {
     setShowPasswords((prev) => ({
       ...prev,
       [fieldName]: !prev[fieldName],
-    }));
-  };
+    }))
+  }
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors = {}
     fields.forEach((field) => {
-      const value = formData[field.name];
+      const value = formData[field.name]
       const isEmpty =
-        ((['text', 'number', 'date', 'password'].includes(field.type) && !value) ||
-          (field.type === 'select' && !value) ||
-          (field.type === 'multiselect' && (!value || value.length === 0)));
+        (['text', 'number', 'date', 'password'].includes(field.type) && !value) ||
+        (field.type === 'select' && !value) ||
+        (field.type === 'multiselect' && (!value || value.length === 0))
 
       if (field.required && isEmpty) {
-        newErrors[field.name] = `${field.label} is required`;
+        newErrors[field.name] = `${field.label} is required`
       }
-    });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    })
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSubmit = () => {
-    if (!validateForm()) return;
+    if (!validateForm()) return
 
-    const cleanedData = { ...formData };
+    const cleanedData = { ...formData }
     fields.forEach((field) => {
       if (field.type === 'select') {
-        cleanedData[field.name] = formData[field.name]?.value || '';
+        cleanedData[field.name] = formData[field.name]?.value || ''
       } else if (field.type === 'multiselect') {
-        cleanedData[field.name] = formData[field.name]?.map((item) => item.value) || [];
+        cleanedData[field.name] = formData[field.name]?.map((item) => item.value) || []
       }
-    });
+    })
 
-    onSubmit(cleanedData);
-    onClose();
-  };
+    onSubmit(cleanedData)
+    onClose()
+  }
 
-  if (!show) return null;
+  if (!show) return null
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
@@ -108,7 +108,9 @@ const ReusableModal = ({
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold">{title}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">&times;</button>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            &times;
+          </button>
         </div>
 
         <div className="px-6 py-4">
@@ -127,7 +129,9 @@ const ReusableModal = ({
                     value={formData[field.name]}
                     onChange={(selected) => handleSelectChange(selected, field.name)}
                   />
-                  {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
+                  {errors[field.name] && (
+                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                  )}
                 </>
               ) : field.type === 'select' ? (
                 <>
@@ -136,7 +140,9 @@ const ReusableModal = ({
                     value={formData[field.name]}
                     onChange={(selected) => handleSelectChange(selected, field.name)}
                   />
-                  {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
+                  {errors[field.name] && (
+                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                  )}
                 </>
               ) : field.type === 'password' ? (
                 <div className="relative">
@@ -154,9 +160,11 @@ const ReusableModal = ({
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-gray-900"
                     tabIndex={-1}
                   >
-                    {showPasswords[field.name] ? <FaEye /> : <FaEyeSlash /> }
+                    {showPasswords[field.name] ? <FaEye /> : <FaEyeSlash />}
                   </button>
-                  {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
+                  {errors[field.name] && (
+                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                  )}
                 </div>
               ) : (
                 <>
@@ -168,7 +176,9 @@ const ReusableModal = ({
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
+                  {errors[field.name] && (
+                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                  )}
                 </>
               )}
             </div>
@@ -191,7 +201,7 @@ const ReusableModal = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReusableModal;
+export default ReusableModal
