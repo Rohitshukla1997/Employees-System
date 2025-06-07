@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const ReusableModal = ({
   show,
@@ -17,8 +18,12 @@ const ReusableModal = ({
     return acc;
   }, {});
 
+  // State for form data
   const [formData, setFormData] = useState(initialFormState);
+  // State for errors
   const [errors, setErrors] = useState({});
+  // State to track which password fields are visible, keyed by field.name
+  const [showPasswords, setShowPasswords] = useState({});
 
   useEffect(() => {
     if (show) {
@@ -31,6 +36,15 @@ const ReusableModal = ({
       } else {
         setFormData(initialFormState);
       }
+
+      // Reset all password visibility to false on open
+      const initialVisibility = {};
+      fields.forEach(field => {
+        if (field.type === 'password') {
+          initialVisibility[field.name] = false;
+        }
+      });
+      setShowPasswords(initialVisibility);
     }
   }, [show, initialData]);
 
@@ -41,6 +55,13 @@ const ReusableModal = ({
 
   const handleSelectChange = (selectedOption, fieldName) => {
     setFormData((prev) => ({ ...prev, [fieldName]: selectedOption }));
+  };
+
+  const togglePasswordVisibility = (fieldName) => {
+    setShowPasswords((prev) => ({
+      ...prev,
+      [fieldName]: !prev[fieldName],
+    }));
   };
 
   const validateForm = () => {
@@ -117,6 +138,26 @@ const ReusableModal = ({
                   />
                   {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
                 </>
+              ) : field.type === 'password' ? (
+                <div className="relative">
+                  <input
+                    type={showPasswords[field.name] ? 'text' : 'password'}
+                    name={field.name}
+                    value={formData[field.name]}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(field.name)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-gray-900"
+                    tabIndex={-1}
+                  >
+                    {showPasswords[field.name] ? <FaEye /> : <FaEyeSlash /> }
+                  </button>
+                  {errors[field.name] && <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>}
+                </div>
               ) : (
                 <>
                   <input

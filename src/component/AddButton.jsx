@@ -2,7 +2,7 @@ import React from 'react';
 
 const variantClasses = {
   primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-  secondary: 'bg-gray-500 hover:bg-gray-600 text-white',
+  secondary: 'bg-gray-700 hover:bg-gray-600 text-white',
   danger: 'bg-red-600 hover:bg-red-700 text-white',
   success: 'bg-green-600 hover:bg-green-700 text-white',
 };
@@ -17,7 +17,7 @@ const AddButton = ({
   label = 'Add',
   onClick,
   icon,
-  variant = 'primary',
+  variant = 'secondary',
   size = '',
   className = '',
   type = 'button',

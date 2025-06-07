@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Table from '@/component/Table';
 import SmartPagination from '@/component/SmartPagination';
 import SearchInput from '@/component/SearchInput';
-import { users } from './data/data';
 import AddButton from '@/component/AddButton';
 import { IoIosAddCircle } from 'react-icons/io'
 import ReusableModal from '@/component/ReusableModal';
@@ -270,7 +269,8 @@ export const NewUsers = () => {
 <div className="mb-4 flex justify-between items-center">
     <div></div> {/* Empty div to push content to the right */}
 
-    <div className="flex gap-2">      <SearchInput
+    <div className="flex gap-2">      
+      <SearchInput
         value={searchQuery}
         onChange={handleSearchChange}
         onClear={() => setSearchQuery('')}
