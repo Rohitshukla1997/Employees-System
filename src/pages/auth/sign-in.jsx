@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   Input,
   Button,
   Typography,
 } from "@material-tailwind/react";
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { postData } from '@/fetchers';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,8 +20,7 @@ export function SignIn() {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      // User already logged in
-      navigate('/dashboar/home');
+      navigate('/dashboard/home');
     }
   }, [navigate]);
 
@@ -42,13 +42,9 @@ export function SignIn() {
         const decoded = jwtDecode(token);
         const role = decoded.role;
 
-        // Redirect based on role
-        if (role === 'SuperAdmin') {
-          navigate('/dashboard/home'); // superadmin default page
-        } else if (role === 'Admin') {
-          navigate('/dashboard/home'); // admin default page
+        if (role === 'SuperAdmin' || role === 'Admin') {
+          navigate('/dashboard/home');
         }
-        
       }
     } catch (error) {
       console.error('Login failed:', error.message || error);
@@ -80,19 +76,33 @@ export function SignIn() {
                 className="!border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{ className: "before:content-none after:content-none" }}
               />
+
               <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
                 Password
               </Typography>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                size="lg"
-                placeholder="********"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{ className: "before:content-none after:content-none" }}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  size="lg"
+                  placeholder="********"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="!border-t-blue-gray-200 focus:!border-t-gray-900 pr-12"
+                  labelProps={{ className: "before:content-none after:content-none" }}
+                />
+                <div
+                  className="absolute right-3 top-2/4 -translate-y-2/4 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeIcon className="h-5 w-5 text-gray-600" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-600" />
+                  )}
+                </div>
+              </div>
             </div>
+
             <Button
               fullWidth
               type="submit"
