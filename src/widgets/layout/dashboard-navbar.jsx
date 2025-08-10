@@ -1,4 +1,4 @@
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate } from 'react-router-dom'
 import {
   Navbar,
   Typography,
@@ -10,7 +10,7 @@ import {
   MenuList,
   MenuItem,
   Avatar,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react'
 import {
   UserCircleIcon,
   Cog6ToothIcon,
@@ -19,83 +19,98 @@ import {
   CreditCardIcon,
   Bars3Icon,
   ChevronDownIcon,
-} from "@heroicons/react/24/solid";
-import {
-  useMaterialTailwindController,
-  setOpenConfigurator,
-  setOpenSidenav,
-} from "@/context";
-import { useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@heroicons/react/24/solid'
+import { useMaterialTailwindController, setOpenConfigurator, setOpenSidenav } from '@/context'
+import { useEffect, useRef, useState } from 'react'
+import Cookies from 'js-cookie'
+import { jwtDecode } from 'jwt-decode'
+import { useQueryClient } from '@tanstack/react-query'
+import Notification from './Notification'
 
 export function DashboardNavbar() {
-  const [controller, dispatch] = useMaterialTailwindController();
-  const { fixedNavbar, openSidenav } = controller;
-  const { pathname } = useLocation();
-  const [layout, page] = pathname.split("/").filter((el) => el !== "");
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const [controller, dispatch] = useMaterialTailwindController()
+  const { fixedNavbar, openSidenav } = controller
+  const { pathname } = useLocation()
+  const [layout, page] = pathname.split('/').filter((el) => el !== '')
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   // Get username from JWT token
-  const token = Cookies.get("token");
-  let username = "User";
+  const token = Cookies.get('token')
+  let username = 'User'
 
   try {
     if (token) {
-      const decodedToken = jwtDecode(token);
-      username = decodedToken?.user?.username || decodedToken?.username || "User";
+      const decodedToken = jwtDecode(token)
+      username = decodedToken?.user?.username || decodedToken?.username || 'User'
     }
   } catch (error) {
-    console.error("Invalid token:", error);
-    Cookies.remove("token", { path: "/" });
-    navigate("/sign-in", { replace: true });
+    console.error('Invalid token:', error)
+    Cookies.remove('token', { path: '/' })
+    navigate('/sign-in', { replace: true })
   }
 
   const handleLogout = () => {
     try {
-      Cookies.remove("token", { path: "/" });
-      queryClient.clear();
-      navigate("/sign-in", { replace: true });
+      Cookies.remove('token', { path: '/' })
+      queryClient.clear()
+      navigate('/sign-in', { replace: true })
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error)
     }
-  };
+  }
+
+  const notifications = [
+    {
+      avatar: 'https://demos.creative-tim.com/material-dashboard/assets/img/team-2.jpg',
+      title: 'New message',
+      message: 'from Laur',
+      time: '13 minutes ago',
+    },
+    {
+      avatar:
+        'https://demos.creative-tim.com/material-dashboard/assets/img/small-logos/logo-spotify.svg',
+      title: 'New album',
+      message: 'by Travis Scott',
+      time: '1 day ago',
+    },
+    {
+      icon: <CreditCardIcon className="h-4 w-4" />,
+      title: 'Payment',
+      message: 'successfully completed',
+      time: '2 days ago',
+    },
+  ]
 
   return (
     <Navbar
-      color={fixedNavbar ? "white" : "transparent"}
+      color={fixedNavbar ? 'white' : 'transparent'}
       className={`rounded-xl transition-all ${
-        fixedNavbar
-          ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
-          : "px-0 py-1"
+        fixedNavbar ? 'sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5' : 'px-0 py-1'
       }`}
       fullWidth
       blurred={fixedNavbar}
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
-          <Breadcrumbs
-            className={`bg-transparent p-0 transition-all ${fixedNavbar ? "mt-1" : ""}`}
-          >
+          <Breadcrumbs className={`bg-transparent p-0 transition-all ${fixedNavbar ? 'mt-1' : ''}`}>
             <Link to={`/${layout}`}>
               <Typography
                 variant="small"
@@ -149,8 +164,8 @@ export function DashboardNavbar() {
                   <li>
                     <button
                       onClick={() => {
-                        handleLogout();
-                        setIsOpen(false);
+                        handleLogout()
+                        setIsOpen(false)
                       }}
                       className="block w-full text-left px-4 py-2 hover:bg-gray-100"
                     >
@@ -161,6 +176,9 @@ export function DashboardNavbar() {
               </div>
             )}
           </div>
+
+          {/* Notification */}
+          <Notification notifications={notifications} />
 
           {/* Notification and settings */}
           <Menu>
@@ -173,11 +191,7 @@ export function DashboardNavbar() {
                   variant="circular"
                 />
                 <div>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="mb-1 font-normal"
-                  >
+                  <Typography variant="small" color="blue-gray" className="mb-1 font-normal">
                     <strong>New message</strong> from Laur
                   </Typography>
                   <Typography
@@ -197,11 +211,7 @@ export function DashboardNavbar() {
                   variant="circular"
                 />
                 <div>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="mb-1 font-normal"
-                  >
+                  <Typography variant="small" color="blue-gray" className="mb-1 font-normal">
                     <strong>New album</strong> by Travis Scott
                   </Typography>
                   <Typography
@@ -218,11 +228,7 @@ export function DashboardNavbar() {
                   <CreditCardIcon className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="mb-1 font-normal"
-                  >
+                  <Typography variant="small" color="blue-gray" className="mb-1 font-normal">
                     Payment successfully completed
                   </Typography>
                   <Typography
@@ -248,9 +254,9 @@ export function DashboardNavbar() {
         </div>
       </div>
     </Navbar>
-  );
+  )
 }
 
 // DashboardNavbar.displayName = "/src/widgets/layout/dashboard-navbar.jsx";
 
-export default DashboardNavbar;
+export default DashboardNavbar

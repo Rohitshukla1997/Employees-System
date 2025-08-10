@@ -1,29 +1,45 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import SmartPagination from '@/component/SmartPagination'
 import Table from '@/component/Table'
 import { VscBlank } from 'react-icons/vsc'
 import { attendance } from './data/data'
+import SearchInput from '@/component/SearchInput'
 
 const Attendancemark = () => {
   const [filteredData, setFilteredData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const totalPages = Math.ceil(attendance.length / itemsPerPage)
+  // Apply search filter
+  const searchedData = useMemo(() => {
+    if (!searchQuery.trim()) return attendance
+    return attendance.filter((item) =>
+      item.EmployeeName.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+  }, [searchQuery])
 
-  // Slice the data based on currentPage & itemsPerPage
+  // Apply pagination
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = itemsPerPage === -1 ? attendance.length : startIndex + itemsPerPage
-    setFilteredData(attendance.slice(startIndex, endIndex))
-  }, [currentPage, itemsPerPage])
+    const endIndex = itemsPerPage === -1 ? searchedData.length : startIndex + itemsPerPage
+    setFilteredData(searchedData.slice(startIndex, endIndex))
+  }, [searchedData, currentPage, itemsPerPage])
 
-  // Dummy handlers (you can replace them)
+  // Recalculate total pages based on search
+  const totalPages = useMemo(() => {
+    return itemsPerPage === -1 ? 1 : Math.ceil(searchedData.length / itemsPerPage)
+  }, [searchedData, itemsPerPage])
+
   const handleViewButton = (id) => {
-    console.log("idzzz",id)
+    console.log('Mark Present clicked for ID:', id)
   }
 
-  // Table columns
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value)
+    setCurrentPage(1) // Reset to first page on search
+  }
+
   const columns = [
     { label: 'Name', key: 'EmployeeName', sortable: true },
     { label: 'Date', key: 'contact', sortable: true },
@@ -31,6 +47,14 @@ const Attendancemark = () => {
 
   return (
     <>
+      <div className="mb-4 flex justify-end items-start">
+        <SearchInput
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onClear={() => setSearchQuery('')}
+          placeholder="Search by username..."
+        />
+      </div>
 
       <Table
         title="Marks Attendance List"
@@ -44,7 +68,7 @@ const Attendancemark = () => {
         viewButtonIcon={<VscBlank size={1} />}
         viewButtonColor={'green'}
         handleViewButton={handleViewButton}
-        isFetching={false} // Set to false as we're using static data
+        isFetching={false}
       />
 
       <SmartPagination

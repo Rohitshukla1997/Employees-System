@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Select from 'react-select'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
@@ -11,6 +11,8 @@ const ReusableModal = ({
   fields = [],
   size = 'lg',
 }) => {
+  const modalRef = useRef(null) // 🔹 ref for detecting outside clicks
+
   const initialFormState = fields.reduce((acc, field) => {
     if (field.type === 'multiselect') acc[field.name] = []
     else if (field.type === 'select') acc[field.name] = null
@@ -18,11 +20,8 @@ const ReusableModal = ({
     return acc
   }, {})
 
-  // State for form data
   const [formData, setFormData] = useState(initialFormState)
-  // State for errors
   const [errors, setErrors] = useState({})
-  // State to track which password fields are visible, keyed by field.name
   const [showPasswords, setShowPasswords] = useState({})
 
   useEffect(() => {
@@ -37,7 +36,6 @@ const ReusableModal = ({
         setFormData(initialFormState)
       }
 
-      // Reset all password visibility to false on open
       const initialVisibility = {}
       fields.forEach((field) => {
         if (field.type === 'password') {
@@ -47,6 +45,20 @@ const ReusableModal = ({
       setShowPasswords(initialVisibility)
     }
   }, [show, initialData])
+
+  // 🔹 Close on outside click
+  useEffect(() => {
+    if (!show) return
+
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [show, onClose])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -102,6 +114,7 @@ const ReusableModal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
       <div
+        ref={modalRef} // 🔹 attach ref here
         className={`bg-white rounded-lg shadow-lg w-full max-h-[90vh] overflow-y-auto ${
           size === 'sm' ? 'max-w-md' : size === 'xl' ? 'max-w-5xl' : 'max-w-2xl'
         }`}
@@ -128,6 +141,7 @@ const ReusableModal = ({
                     options={field.options || []}
                     value={formData[field.name]}
                     onChange={(selected) => handleSelectChange(selected, field.name)}
+                    placeholder="select option"
                   />
                   {errors[field.name] && (
                     <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
@@ -139,6 +153,7 @@ const ReusableModal = ({
                     options={field.options || []}
                     value={formData[field.name]}
                     onChange={(selected) => handleSelectChange(selected, field.name)}
+                    placeholder="select option"
                   />
                   {errors[field.name] && (
                     <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>

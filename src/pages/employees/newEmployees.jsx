@@ -2,7 +2,6 @@ import SearchInput from '@/component/SearchInput'
 import SmartPagination from '@/component/SmartPagination'
 import Table from '@/component/Table'
 import React, { useState } from 'react'
-import { employees } from './data/data'
 import { useEffect } from 'react'
 import { deleteData, getData, patchData, postData } from '@/fetchers'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -31,6 +30,8 @@ const newEmployees = () => {
     { label: 'Email', key: 'email', sortable: true },
     { label: 'Degination', key: 'degination', sortable: true },
     { label: 'Type', key: 'type', sortable: true },
+    { label: 'Username', key: 'username', sortable: true },
+    { label: 'Password', key: 'password', sortable: false },
     { label: 'Contact', key: 'phone', sortable: true },
     { label: 'Joined', key: 'joinedDate', sortable: true },
   ]
@@ -48,6 +49,21 @@ const newEmployees = () => {
       label: 'Employee Name',
       type: 'text',
       placeholder: 'Enter Employee Name',
+      required: true,
+    },
+    {
+      name: 'username',
+      label: 'Username',
+      type: 'text',
+      placeholder: 'Enter Username',
+      required: true,
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      type: 'text',
+      placeholder: 'Enter Password',
+      required: true,
     },
     {
       name: 'type',
@@ -74,10 +90,17 @@ const newEmployees = () => {
   const mapUserToForm = (user) => ({
     employeeName: user?.employeeName || '',
     email: user?.email || '',
+    username: user?.username || '',
+    password: user?.password || '',
     degination: user?.degination || '',
     type: user?.type?.toLowerCase() || '',
     phone: user?.phone || '',
-    joinedDate: user?.joinedDate || '',
+    joinedDate: user?.joinedDate
+      ? (() => {
+          const [day, month, year] = user.joinedDate.split('-')
+          return `${year}-${month}-${day}` // HTML date input format
+        })()
+      : '',
   })
 
   //  get api
@@ -95,11 +118,18 @@ const newEmployees = () => {
 
   useEffect(() => {
     if (data) {
-      const adaptedData = data.map((item) => ({
-        ...item,
-        id: item._id,
-        joinedDate: new Date(item.joinedDate).toISOString().split('T')[0],
-      }))
+      const adaptedData = data.map((item) => {
+        const dateObj = new Date(item.joinedDate)
+        const day = String(dateObj.getDate()).padStart(2, '0')
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+        const year = dateObj.getFullYear()
+
+        return {
+          ...item,
+          id: item._id,
+          joinedDate: `${day}-${month}-${year}`,
+        }
+      })
       setOriginalData(adaptedData)
     }
   }, [data])

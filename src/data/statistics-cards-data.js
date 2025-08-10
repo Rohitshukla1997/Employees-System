@@ -8,9 +8,9 @@ import {
 export const statisticsCardsData = [
   {
     color: "gray",
-    icon: BanknotesIcon,
-    title: "Today's Money",
-    value: "$53k",
+    icon: UsersIcon,
+    title: "Active Users",
+    value: "53",
     footer: {
       color: "text-green-500",
       value: "+55%",
@@ -20,30 +20,30 @@ export const statisticsCardsData = [
   {
     color: "gray",
     icon: UsersIcon,
-    title: "Today's Users",
-    value: "2,300",
+    title: "Inactive Users",
+    value: "30",
     footer: {
-      color: "text-green-500",
-      value: "+3%",
+      color: "text-red-500",
+      value: "-3%",
       label: "than last month",
     },
   },
   {
     color: "gray",
     icon: UserPlusIcon,
-    title: "New Clients",
+    title: "Total employess",
     value: "3,462",
     footer: {
-      color: "text-red-500",
-      value: "-2%",
+      color: "text-green-500",
+      value: "+2%",
       label: "than yesterday",
     },
   },
   {
     color: "gray",
     icon: ChartBarIcon,
-    title: "Sales",
-    value: "$103,430",
+    title: "New Users",
+    value: "20",
     footer: {
       color: "text-green-500",
       value: "+5%",
