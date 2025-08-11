@@ -40,8 +40,11 @@ function Table({
   const [viewLoadingId, setViewLoadingId] = useState(null)
   const [passwordVisibility, setPasswordVisibility] = useState({})
 
-  const [controller] = useMaterialTailwindController() // ⬅️ Get the state
-  const { sidenavColor } = controller // ⬅️ Extract current color
+  const [controller] = useMaterialTailwindController() //Get the state
+  const { sidenavColor } = controller // extract current color
+
+  // console.log('filtered data', filteredData)
+  // console.log('columns', columns)
 
   const colorMap = {
     white: 'white',
