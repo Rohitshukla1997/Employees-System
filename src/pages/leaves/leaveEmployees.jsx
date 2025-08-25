@@ -1,113 +1,112 @@
-import SearchInput from '@/component/SearchInput';
-import SmartPagination from '@/component/SmartPagination';
-import Table from '@/component/Table';
+import SearchInput from '@/component/SearchInput'
+import SmartPagination from '@/component/SmartPagination'
+import Table from '@/component/Table'
 import React, { useEffect, useState } from 'react'
-import { leave } from './data/data';
+import { useQuery } from '@tanstack/react-query'
+import { getData } from '@/fetchers'
 
-const leaveEmployees = () => {
-    const [filteredData, setFilteredData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [searchQuery, setSearchQuery] = useState('');
+const LeaveEmployees = () => {
+  const [filteredData, setFilteredData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [searchQuery, setSearchQuery] = useState('')
+  const totalPages = itemsPerPage === -1 ? 1 : Math.ceil(filteredData.length / itemsPerPage)
 
-// Filter + paginate data
+  // fetch leave data
+  const { data, isLoading } = useQuery({
+    queryKey: ['leave/get'],
+    queryFn: getData,
+    onError: (error) => {
+      console.error('Error fetching data:', error)
+    },
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: true,
+    keepPreviousData: true,
+  })
+
+  // transform API response
   useEffect(() => {
-    const filtered = leave.filter(emp =>
-      emp.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    if (data && Array.isArray(data.data)) {
+      const formatted = data.data.map((item) => ({
+        ...item,
+        fromDate: new Date(item.fromDate).toLocaleDateString('en-GB'), // dd/mm/yyyy
+        toDate: new Date(item.toDate).toLocaleDateString('en-GB'),
+        name: item.employeeId ? item.employeeId.name : 'N/A', // fallback if null
+      }))
+      setFilteredData(formatted)
+    }
+  }, [data])
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = itemsPerPage === -1 ? filtered.length : startIndex + itemsPerPage;
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value)
+    setCurrentPage(1)
+  }
 
-    setFilteredData(filtered.slice(startIndex, endIndex));
-  }, [currentPage, itemsPerPage, searchQuery]);
+  const handleAddUser = () => {
+    console.log('Add User clicked')
+  }
 
-  const totalFiltered = leave.filter(emp =>
-    emp.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const totalPages = Math.ceil(totalFiltered.length / itemsPerPage);
+  const handleViewButton = (id) => console.log('View ID:', id)
+  const handleEditButton = (id) => console.log('Edit ID:', id)
+  const handleDeleteButton = (id) => console.log('Delete ID:', id)
 
+  const columns = [
+    { label: 'Employee Name', key: 'name', sortable: true },
+    { label: 'From Date', key: 'fromDate', sortable: true },
+    { label: 'To Date', key: 'toDate', sortable: true },
+    { label: 'Description', key: 'description', sortable: true },
+    { label: 'Status', key: 'status', sortable: true },
+  ]
 
-    const handleSearchChange = (e) => {
-      setSearchQuery(e.target.value);
-      setCurrentPage(1); // Reset to first page on search
-    };
-  
-    const handleAddUser = () => {
-      console.log('Add User clicked');
-      // Open modal or redirect to add form
-    };
-  
-    
-    const handleViewButton = (id) => {
-      console.log("View ID:", id);
-    };
-  
-    const handleEditButton = (id) => {
-      console.log("Edit ID:", id);
-    };
-  
-    const handleDeleteButton = (id) => {
-      console.log("Delete ID:", id);
-    };
-  
-    const columns = [
-      { label: 'Employee Name', key: 'name', sortable: true },
-      { label: 'From Date', key: 'fromDate', sortable: true },
-      { label: 'To Date', key: 'toDate', sortable: true },
-      { label: 'Description', key: 'description', sortable: true },
-
-    ];
-  
   return (
     <>
-    <div className="mb-4 flex justify-between items-center">
-    <div></div> {/* Empty div to push content to the right */}
+      <div className="mb-4 flex justify-between items-center">
+        <div></div>
+        <div className="flex gap-2">
+          <SearchInput
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onClear={() => setSearchQuery('')}
+            placeholder="Search by username..."
+          />
+          <button
+            onClick={handleAddUser}
+            className="bg-gray-600 hover:bg-brown-700 text-white px-4 py-2 rounded-md shadow-sm"
+          >
+            Add User
+          </button>
+        </div>
+      </div>
 
-    <div className="flex gap-2">
-      <SearchInput
-        value={searchQuery}
-        onChange={handleSearchChange}
-        onClear={() => setSearchQuery('')}
-        placeholder="Search by username..."
+      <Table
+        title="Leave Application"
+        columns={columns}
+        filteredData={filteredData}
+        setFilteredData={setFilteredData}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        viewButton={false}
+        handleViewButton={handleViewButton}
+        editButton={true}
+        handleEditButton={handleEditButton}
+        deleteButton={true}
+        handleDeleteButton={handleDeleteButton}
+        isFetching={isLoading}
       />
-      <button
-        onClick={handleAddUser} // define this function to open modal or perform action
-        className="bg-gray-600 hover:bg-brown-700 text-white px-4 py-2 rounded-md shadow-sm"
-      >
-        Add User
-      </button>
-    </div>
-  </div>
 
-  <Table
-    title="Leave Application"
-    columns={columns}
-    filteredData={filteredData}
-    setFilteredData={setFilteredData}
-    currentPage={currentPage}
-    itemsPerPage={itemsPerPage}
-    viewButton={false}
-    handleViewButton={handleViewButton}
-    editButton={true}
-    handleEditButton={handleEditButton}
-    deleteButton={true}
-    handleDeleteButton={handleDeleteButton}
-    isFetching={false}
-  />
-
-  <SmartPagination
-    totalPages={totalPages}
-    currentPage={currentPage}
-    onPageChange={setCurrentPage}
-    itemsPerPage={itemsPerPage}
-    onItemsPerPageChange={(value) => {
-      setItemsPerPage(value);
-      setCurrentPage(1);
-    }}
-  />
-</>
+      <SmartPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={(value) => {
+          setItemsPerPage(value)
+          setCurrentPage(1)
+        }}
+      />
+    </>
   )
 }
 
-export default leaveEmployees
+export default LeaveEmployees
